@@ -4,7 +4,11 @@
     1. Vérifie si utilisateur existe si oui RETURN -1
     2. Si client n'existe PAS, le créer et retourne le table avec les nouvelles valeurs
 */
-CREATE PROCEDURE creerUtilisateur (@prenom varchar, @nom varchar,@email varchar,@motDePasse varchar) AS
+
+DECLARE @noUtilisateur INT;
+DECLARE @prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT;
+
+CREATE PROCEDURE creerUtilisateur (@noUtilisateur INT,@prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT) AS
 BEGIN
     IF EXISTS(SELECT * FROM utilisateur WHERE email=@email)
     BEGIN
@@ -13,24 +17,25 @@ BEGIN
     IF NOT EXISTS(SELECT * FROM utilisateur WHERE email=@email)
     RETURN @utilisateur TABLE(email varchar, motDePasse varchar)
     BEGIN
-        INSERT INTO @utilisateur 
-        VALUES ('Prénom',dbo.prenom(@prenom) AND 'Nom',dbo.nom(@nom));
-        INSERT INTO @utilisateur
-        VALUES ('email',dbo.email(@email) AND 'Mot de passe',dbo.motDePasse(@motDePasse));
+        SET NouveauUtilisateur();
         RETURN;
     END;
 
 
 /*
+    Cette fonction creer un nouvelle utilisateur.
+    Il sera appeler dans ma procedure creerUtilisateur
 
-Je n'est pas sur si j'utilisais la bonne facon pour créer une procedure. 
-J'ai donc commencer une procedure avec une fonction pour tenter de retourne
-les donnee du nouveau utilisateur et retourner la table
+*/
 
-CREATE FUNCTION NouveauUtilisateur(@email varchar, @motDePasse varchar)
+CREATE FUNCTION NouveauUtilisateur(@noUtilisateur INT,  @prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT)
 RETURN @utilisateur TABLE() 
-    AS
-RETURN(SELECT * FROM utilisateur WHERE email=@email AND motDePasse=@motDePasse); */   
+AS
+BEGIN
+    INSERT INTO @utilisateur; 
+    VALUES ('Prenom',dbo.prenom(@prenom) AND 'Nom',dbo.nom(@nom) AND 'noTelephone', dbo.noTelephone(@noTelephone) AND 'email', dbo.motDePasse(@motDePasse) AND 'horaire',dbo.horaire(@horaire) AND  'noEquipe',dbo.noEquipe(@noEquipe));
+    RETURN;
+END;   
 
 
 
@@ -48,7 +53,7 @@ CREATE TABLE dbo.[utilisateur]
     email               NVARCHAR(50)          NOT NULL,
     motDePasse          BINARY(100)           NOT NULL,
     salage              UNIQUEIDENTIFIER,
-    CONSTRAINT [noUtilisateur]  PRIMARY KEY 
+    CONSTRAINT [PK_noUtilisateur]  PRIMARY KEY CLUSTERED
     --- Je ne sais pas quoi mettre dans la primary key. Je vais regarder 
     --  avec coéquipier
 )
@@ -58,10 +63,14 @@ GO
 -- CREATION DU SALAGE 
 
 CREATE PROCEDURE dbo.ajoutUtilisateur
+    @noUtilisateur INT,
     @prenom NVARCHAR(50),
     @nom NVARCHAR(50),
     @email NVARCHAR(50),
     @motDePasse NVARCHAR(20),
+    @noTelephone INT,
+    @horaire VARCHAR(255),
+    @noEquipe INT,
     @reponse NVARCHAR(250) OUTPUT
 AS
 BEGIN
@@ -69,7 +78,7 @@ BEGIN
     DECLARE @sel UNIQUEIDENTIFIER=NEWID();
     BEGIN TRY
         INSERT INTO bdo.[utilisateur](prenom,nom,email,motDePasse,sel)
-        VALUES(,HASHBYTES(@prenom,@nom,@email,@motDePasse + CAST(@sel AS NVARCHAR(30))), @sel);
+        VALUES(@email ,HASHBYTES(@prenom,@nom,@motDePasse + CAST(@sel AS NVARCHAR(30))),@noTelephone,@horaire,@noEquipe, @sel);
         SET @reponse = "Connexion Réussi";
     END TRY
     BEGIN CATCH
