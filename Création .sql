@@ -68,3 +68,6 @@ CREATE TABLE equipe
     descriptionEquipe        VARCHAR(255)                                            NOT NULL,
     noProjet                 INT                                                     NOT NULL                    
 );
+
+
+-- Table de salage
