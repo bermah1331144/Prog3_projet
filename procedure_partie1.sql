@@ -2,11 +2,17 @@
 
 /*Cette procédure fait 2 choses
     1. Vérifie si utilisateur existe si oui RETURN -1
-    2. Si client n'existe PAS, le créer et retourne le table avec les nouvelles valeurs
+    2. Si client n'existe PAS, il appel la procedure dbo.ajoutUtilisateur et retourn un table
 */
 
 DECLARE @noUtilisateur INT;
-DECLARE @prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT;
+DECLARE @prenom varchar(50);
+DECLARE @nom varchar(50);
+DECLARE @noTelephone varchar(50);
+DECLARE email varchar(50);
+DECLARE @motDePase varchar(50);
+DECLARE @horaire varchar(255);
+DECLARE @noEquipe INT;
 
 CREATE PROCEDURE creerUtilisateur (@noUtilisateur INT,@prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT) AS
 BEGIN
@@ -15,29 +21,11 @@ BEGIN
         RETURN -1;
     END;
     IF NOT EXISTS(SELECT * FROM utilisateur WHERE email=@email)
-    RETURN @utilisateur TABLE(email varchar, motDePasse varchar)
+    RETURN @utilisateur TABLE(email varchar)
     BEGIN
-        SET NouveauUtilisateur();
+        EXECUTE dbo.ajoutUtilisateur;
         RETURN;
     END;
-
-
-/*
-    Cette fonction creer un nouvelle utilisateur.
-    Il sera appeler dans ma procedure creerUtilisateur
-
-*/
-
-CREATE FUNCTION NouveauUtilisateur(@noUtilisateur INT,  @prenom varchar(50), @nom varchar(50),@noTelephone varchar(50), email varchar(50), @motDePase varchar(50),@horaire varchar(255), @noEquipe INT)
-RETURN @utilisateur TABLE() 
-AS
-BEGIN
-    INSERT INTO @utilisateur; 
-    VALUES ('Prenom',dbo.prenom(@prenom) AND 'Nom',dbo.nom(@nom) AND 'noTelephone', dbo.noTelephone(@noTelephone) AND 'email', dbo.motDePasse(@motDePasse) AND 'horaire',dbo.horaire(@horaire) AND  'noEquipe',dbo.noEquipe(@noEquipe));
-    RETURN;
-END;   
-
-
 
 /* 
 
