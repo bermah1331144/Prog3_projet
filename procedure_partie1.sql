@@ -1,9 +1,7 @@
 
---Cette procédure vérifie si un utilisateur existe ou pas avant de le crée dans la bd avec un mot de passe hashé
-
--- CREATION DE LA PROCÉDURE D'INSTRIPTION 
-
-CREATE PROCEDURE dbo.inscription
+-- procédure d'inscription
+CREATE PROCEDURE dbo.ajoutUtilisateur
+    @noUtilisateur INT,
     @prenom NVARCHAR(50),
     @nom NVARCHAR(50),
     @email NVARCHAR(50),
