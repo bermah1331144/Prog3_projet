@@ -11,11 +11,25 @@ CREATE TABLE utilisateur
     noUtilisateur            INT				IDENTITY(1,1)                        NOT NULL,
     prenom                   VARCHAR(50)                                             NOT NULL,
     nom                      VARCHAR(50)                                             NOT NULL,
-    motDePasse               VARCHAR(50)                                             NOT NULL,
+    motDePasse               VARCHAR(50)                                             NOT NULL, --Avant le salage 
     noTelephone              INT		                                             NOT NULL,
     email                    VARCHAR(50)                                             NOT NULL,
     horaire                  VARCHAR(255)                                            NOT NULL,
-    noEquipe                 INT		                                             NOT NULL
+    noEquipe                 INT		                                                 NULL
+);
+
+CREATE TABLE dbo.[utilisateur]
+(
+    noUtilisateur           INT                 IDENTITY(1,1)                        NOT NULL,
+    prenom                  NVARCHAR(50)                                             NOT NULL, -- Après salage
+    nom                     NVARCHAR(50)                                             NOT NULL,
+    horaire                 VARCHAR(255)                                             NOT NULL,
+    noTelephone             INT		                                                 NOT NULL,
+    email                   NVARCHAR(50)                                             NOT NULL,
+    motDePasse              BINARY(100)                                              NOT NULL,
+    salage                  UNIQUEIDENTIFIER,
+    noEquipe                INT		                                                     NULL,
+    CONSTRAINT [PK_noUtilisateur]  PRIMARY KEY CLUSTERED(noUtilisateur ASC)
 );
 
 -- table tâche
@@ -68,6 +82,3 @@ CREATE TABLE equipe
     descriptionEquipe        VARCHAR(255)                                            NOT NULL,
     noProjet                 INT                                                     NOT NULL                    
 );
-
-
--- Table de salage

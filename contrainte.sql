@@ -49,6 +49,11 @@ ALTER TABLE utilisateur
 ADD CONSTRAINT UC_Mdp
 UNIQUE (motDePasse);
 
+-- unique email
+ALTER TABLE utilisateur 
+ADD CONSTRAINT UC_Email
+UNIQUE (email);
+
 -- contrainte sur les différentes dates dans la table tache
 ALTER TABLE tache
 ADD CONSTRAINT CHK_Tache        
