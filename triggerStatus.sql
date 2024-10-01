@@ -14,24 +14,17 @@ IF UPDATE (statusTache) BEGIN
 	WHILE (@@FETCH_STATUS = 0) BEGIN
 		IF(@status='Terminer')
 		BEGIN 
-        SELECT @verif = COUNT(*)
-        FROM tache
-        WHERE noProjet = @noProjet AND @status <> 'Terminer' 
-			IF(@verif <> 0)
-			SELECT titre FROM tache WHERE noProjet = @noProjet;
-				IF(@status = 'Terminer')
-				BEGIN
-					SELECT @verif = COUNT(*) - 1
-					IF(@verif = 0)
-						BEGIN
-							UPDATE tache SET statusTache='Terminer'
-							WHERE noProjet = @noProjet
-							FETCH cStatusUpdate INTO @status, @noProjet;
-						END;
-				END;
-
+        	SELECT @verif = COUNT(*)
+        	FROM tache
+        	WHERE noProjet = @noProjet AND statusTache <> 'Terminer' 
+			IF(@verif = 0)
+			BEGIN
+				UPDATE projet SET statusPojet ='Terminer'
+				WHERE noProjet = @noProjet;
+			END;	
 		END;
-		CLOSE  cStatusUpdate;
-		DEALLOCATE cStatusUPdate;
+		FETCH cStatusUpdate INTO @status, @noProjet;
 	END;
+	CLOSE  cStatusUpdate;
+	DEALLOCATE cStatusUPdate;
 END;
